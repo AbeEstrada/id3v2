@@ -11,22 +11,22 @@ type LinkFrame struct {
 	Url      string
 }
 
-func (tf LinkFrame) Size() int {
-	return 1 + encodedSize(tf.Url, tf.Encoding) + len(tf.Encoding.TerminationBytes)
+func (lf LinkFrame) Size() int {
+	return 1 + encodedSize(lf.Url, lf.Encoding) + len(lf.Encoding.TerminationBytes)
 }
 
-func (tf LinkFrame) UniqueIdentifier() string {
+func (lf LinkFrame) UniqueIdentifier() string {
 	return "ID"
 }
 
-func (tf LinkFrame) WriteTo(w io.Writer) (int64, error) {
+func (lf LinkFrame) WriteTo(w io.Writer) (int64, error) {
 	return useBufWriter(w, func(bw *bufWriter) {
-		bw.WriteByte(tf.Encoding.Key)
-		bw.EncodeAndWriteText(tf.Url, tf.Encoding)
+		bw.WriteByte(lf.Encoding.Key)
+		bw.EncodeAndWriteText(lf.Url, lf.Encoding)
 
 		// https://github.com/bogem/id3v2/pull/52
 		// https://github.com/bogem/id3v2/pull/33
-		bw.Write(tf.Encoding.TerminationBytes)
+		bw.Write(lf.Encoding.TerminationBytes)
 	})
 }
 
